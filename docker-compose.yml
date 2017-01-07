@@ -1,5 +1,4 @@
 version: '2'
-
 services:
   gitlab:
     restart: always
@@ -8,9 +7,9 @@ services:
     - redis
     - postgresql
     volumes:
-    - /srv/docker/gitlab/gitlab:/home/git/data:Z
+    - ./volumes/gitlab:/home/git/data:Z
     environment:
-    - VIRTUAL_HOST=gitlab.xyz.com
+    - VIRTUAL_HOST=gitlab.cnvc
     - DEBUG=false
 
     - DB_ADAPTER=postgresql
@@ -134,13 +133,13 @@ services:
     command:
     - --loglevel warning
     volumes:
-    - /srv/docker/gitlab/redis:/var/lib/redis:Z
+    - ./volumes/redis:/var/lib/redis:Z
 
   postgresql:
     restart: always
     image: sameersbn/postgresql:9.5-4
     volumes:
-    - /srv/docker/gitlab/postgresql:/var/lib/postgresql:Z
+    - ./volumes/postgresql:/var/lib/postgresql:Z
     environment:
     - DB_USER=gitlab
     - DB_PASS=password
@@ -148,16 +147,19 @@ services:
     - DB_EXTENSION=pg_trgm
 
   jenkins:
-    image: 'jenkins'
+    image: 'jenkins:2.32.1'
+    restart: always
     ports:
       - '8080:8080'
     environment:
-        - VIRTUAL_HOST=jenkins.xyz.com
+        - VIRTUAL_HOST=jenkins.cnvc
         - VIRTUAL_PORT=8080
 
   nginx-proxy:
-    image: 'jwilder/nginx-proxy'
+    image: 'jwilder/nginx-proxy:0.5.0'
+    restart: always
     ports:
         - "80:80"
     volumes:
         - /var/run/docker.sock:/tmp/docker.sock:ro
+
