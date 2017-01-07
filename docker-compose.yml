@@ -1,0 +1,27 @@
+gitlab:
+  image: 'gitlab/gitlab-ce:latest'
+  restart: always
+  hostname: 'gitlab.xyz.com'
+  environment:
+      - VIRTUAL_HOST=gitlab.xyz.com
+  volumes:
+    - '/srv/gitlab/config:/etc/gitlab'
+    - '/srv/gitlab/logs:/var/log/gitlab'
+    - '/srv/gitlab/data:/var/opt/gitlab'
+jenkins:
+  image: 'jenkins'
+  ports:
+    - '8080:8080'
+  environment:
+      - VIRTUAL_HOST=jenkins.xyz.com
+      - VIRTUAL_PORT=8080
+nginx-proxy:
+  image: 'jwilder/nginx-proxy'
+  ports:
+      - "80:80"
+  volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+mysql:
+  image: 'mysql'
+  environment:
+      - MYSQL_ROOT_PASSWORD=password
