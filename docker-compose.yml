@@ -1,8 +1,8 @@
-version: '2'
+version: "2"
 services:
   gitlab:
-    restart: always
     image: sameersbn/gitlab:8.15.2
+    restart: always
     depends_on:
     - redis
     - postgresql
@@ -147,10 +147,10 @@ services:
     - DB_EXTENSION=pg_trgm
 
   jenkins:
-    image: 'jenkins:2.32.1'
+    image: "jenkins:2.32.1"
     restart: always
     ports:
-      - '8080:8080'
+      - "8080:8080"
     volumes:
       - ./volumes/jenkins:/var/jenkins_home:Z
     environment:
@@ -158,10 +158,12 @@ services:
         - VIRTUAL_PORT=8080
 
   nginx-proxy:
-    image: 'jwilder/nginx-proxy:0.5.0'
+    image: "jwilder/nginx-proxy:0.5.0"
     restart: always
     ports:
         - "80:80"
     volumes:
         - /var/run/docker.sock:/tmp/docker.sock:ro
+    environment:
+        - DEFAULT_HOST=gitlab.cnvc
 
