@@ -151,6 +151,8 @@ services:
     restart: always
     ports:
       - '8080:8080'
+    volumes:
+      - ./volumes/jenkins:/var/jenkins_home:Z
     environment:
         - VIRTUAL_HOST=jenkins.cnvc
         - VIRTUAL_PORT=8080
